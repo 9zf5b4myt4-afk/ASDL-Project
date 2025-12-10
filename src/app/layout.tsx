@@ -1,8 +1,7 @@
-// src/app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react"; // <--- 1. Import Suspense
 import "./globals.css";
-// IMPORT THE NAVBAR HERE
 import Navbar from "../components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* ADD THE NAVBAR HERE */}
-        <Navbar />
+        {/* 2. Wrap Navbar in Suspense with a simple fallback */}
+        <Suspense fallback={<div className="h-20 bg-white border-b border-gray-100" />}>
+          <Navbar />
+        </Suspense>
         {children}
       </body>
     </html>
