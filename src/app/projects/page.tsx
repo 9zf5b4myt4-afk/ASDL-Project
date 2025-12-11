@@ -29,7 +29,7 @@ const getPlainText = (blocks: any[]) => {
 
 async function getProjects(locale: string) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+    const apiUrl = 'https://asdl-backend-production.up.railway.app';
     // Fetch all projects, localized
     const response = await axios.get<StrapiResponse>(`${apiUrl}/api/project-actions?locale=${locale}&populate=*`);
     return response.data;

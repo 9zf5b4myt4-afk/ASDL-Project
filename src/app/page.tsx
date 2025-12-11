@@ -27,7 +27,7 @@ const getPlainText = (blocks: any[]) => {
 // UPDATED FUNCTION: Accepts 'locale' to fetch the right language
 async function getStrategicAxes(locale: string) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+    const apiUrl = 'https://asdl-backend-production.up.railway.app';
     // We append ?locale= to the API URL
     const response = await axios.get<StrapiResponse>(`${apiUrl}/api/strategic-axes?locale=${locale}`);
     return response.data;
