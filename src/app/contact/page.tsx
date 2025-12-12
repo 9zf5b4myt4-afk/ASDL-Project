@@ -64,7 +64,7 @@ export default async function ContactPage({ searchParams }: { searchParams: { la
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                       </svg>
                     </div>
-                    <p>contact@asdl-senegal.org</p>
+                    <p>asdl.contact.sn@gmail.com</p>
                   </div>
                 </div>
               </div>
@@ -77,8 +77,8 @@ export default async function ContactPage({ searchParams }: { searchParams: { la
                 <div className="space-y-4">
                   <div className="bg-white p-4 rounded-lg border border-senegal-100">
                     <h4 className="font-semibold text-gray-800 text-sm uppercase tracking-wide mb-1">{t.contact.bankDetails}</h4>
-                    <p className="text-gray-500 text-sm">CBAO Senegal</p>
-                    <p className="font-mono text-gray-800">SN012 01234 00000000000 00</p>
+                    <p className="text-gray-500 text-sm">BANK Senegal</p>
+                    <p className="font-mono text-gray-800">S***2 0**34 000*****000 00</p>
                   </div>
                   
                   <div className="bg-white p-4 rounded-lg border border-senegal-100">
@@ -86,11 +86,11 @@ export default async function ContactPage({ searchParams }: { searchParams: { la
                     <div className="flex gap-4">
                       <div>
                         <span className="text-xs text-orange-500 font-bold">Orange</span>
-                        <p className="font-mono text-gray-800">+221 77 000 00 00</p>
+                        <p className="font-mono text-gray-800">+221 76 162 57 27</p>
                       </div>
                       <div>
                         <span className="text-xs text-blue-400 font-bold">Wave</span>
-                        <p className="font-mono text-gray-800">+221 77 000 00 00</p>
+                        <p className="font-mono text-gray-800">+221 76 162 57 27</p>
                       </div>
                     </div>
                   </div>
