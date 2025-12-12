@@ -44,8 +44,8 @@ export default function Footer() {
             <h4 className="text-lg font-bold mb-4 text-white">Contact</h4>
             <ul className="space-y-2 text-senegal-100">
               <li>Dakar, Senegal</li>
-              <li>contact@asdl-senegal.org</li>
-              <li>+221 33 000 00 00</li>
+              <li>asdl.contact.sn@gmail.com</li>
+              <li>+221 33 *** 00 00</li>
             </ul>
           </div>
         </div>
