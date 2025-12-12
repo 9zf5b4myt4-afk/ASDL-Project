@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Suspense } from "react"; // <--- 1. Import Suspense
+import { Suspense } from "react";
 import "./globals.css";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +20,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* 2. Wrap Navbar in Suspense with a simple fallback */}
-        <Suspense fallback={<div className="h-20 bg-white border-b border-gray-100" />}>
+        {/* HEADER (Navbar) at the TOP */}
+        <Suspense fallback={<div className="h-20 bg-white" />}>
           <Navbar />
         </Suspense>
+        
+        {/* MAIN PAGE CONTENT */}
         {children}
+        
+        {/* FOOTER at the BOTTOM */}
+        <Suspense fallback={<div className="h-20 bg-gray-900" />}>
+          <Footer />
+        </Suspense>
       </body>
     </html>
   );

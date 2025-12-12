@@ -8,6 +8,17 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        // Custom "Senegal Green" - warm and deep
+        senegal: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          500: '#22c55e', // Bright green for icons
+          700: '#15803d', // Primary brand color
+          800: '#166534', // Darker for hover states
+          900: '#14532d', // Deepest for footers/backgrounds
+        }
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

@@ -1,10 +1,7 @@
-// src/utils/translations.ts
-
 export const dictionary = {
   en: {
-    // ... keep all existing keys ...
     welcomeTitle: "Senegalese Association for Local Development (ASDL)",
-    welcomeSubtitle: "Empowering communities through sustainable development and strategic action.",
+    welcomeSubtitle: "Act local, grow together.",
     strategicAxesTitle: "Our Strategic Axes",
     strategicAxesSubtitle: "The core pillars defining our mission and operational focus.",
     learnMore: "Learn more",
@@ -15,11 +12,20 @@ export const dictionary = {
     supportCauseTitle: "Want to support this cause?",
     supportCauseText: "Your contribution can help us achieve our goals in",
     contactUs: "Contact Us About This",
+    copyright: "© 2025 ASDL Association. All rights reserved.",
     nav: {
       home: "Home",
       about: "About Us",
+      aboutDesc: "Discover our mission, our vision, and the team committed to Senegal's future.",
       projects: "Projects",
-      donate: "Donate / Contact"
+      projectsDesc: "Explore our concrete actions in education, health, and the environment.",
+      donateContact: "Get Involved", 
+      donate: "Make a Donation",
+      donateDesc: "Support our initiatives financially via Wave, Orange Money, or Bank Transfer.",
+      contact: "Contact Us",
+      contactDesc: "Send us a message or find our physical address in Dakar.",
+      menu: "Menu",
+      close: "Close"
     },
     status: {
       active: "Active",
@@ -43,7 +49,6 @@ export const dictionary = {
       teamTitle: "Our Leadership",
       teamSubtitle: "A multidisciplinary team committed to impactful action."
     },
-    // NEW CONTACT SECTION
     contact: {
       heroTitle: "Contact & Support",
       heroSubtitle: "Join us in making a difference. Whether you want to volunteer, partner, or donate.",
@@ -64,9 +69,8 @@ export const dictionary = {
     }
   },
   fr: {
-    // ... keep all existing keys ...
     welcomeTitle: "Association Sénégalaise pour le Développement Local (ASDL)",
-    welcomeSubtitle: "Autonomiser les communautés par le développement durable et l'action stratégique.",
+    welcomeSubtitle: "Agir local, grandir ensemble.",
     strategicAxesTitle: "Nos Axes Stratégiques",
     strategicAxesSubtitle: "Les piliers fondamentaux définissant notre mission et notre action.",
     learnMore: "En savoir plus",
@@ -77,11 +81,20 @@ export const dictionary = {
     supportCauseTitle: "Vous souhaitez soutenir cette cause ?",
     supportCauseText: "Votre contribution peut nous aider à atteindre nos objectifs dans le domaine :",
     contactUs: "Contactez-nous",
+    copyright: "© 2025 Association ASDL. Tous droits réservés.",
     nav: {
       home: "Accueil",
       about: "À propos",
+      aboutDesc: "Découvrez notre mission, notre vision et l'équipe engagée pour l'avenir du Sénégal.",
       projects: "Projets",
-      donate: "Faire un don / Contact"
+      projectsDesc: "Explorez nos actions concrètes dans l'éducation, la santé et l'environnement.",
+      donateContact: "S'engager",
+      donate: "Faire un don",
+      donateDesc: "Soutenez nos initiatives financièrement via Wave, Orange Money ou Virement.",
+      contact: "Contactez-nous",
+      contactDesc: "Envoyez-nous un message ou trouvez notre adresse physique à Dakar.",
+      menu: "Menu",
+      close: "Fermer"
     },
     status: {
       active: "Actif",
@@ -105,7 +118,6 @@ export const dictionary = {
       teamTitle: "Notre Leadership",
       teamSubtitle: "Une équipe pluridisciplinaire engagée pour une action impactante."
     },
-    // NEW CONTACT SECTION
     contact: {
       heroTitle: "Contact & Soutien",
       heroSubtitle: "Rejoignez-nous pour faire la différence. Que vous souhaitiez devenir bénévole, partenaire ou faire un don.",

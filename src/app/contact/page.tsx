@@ -1,4 +1,3 @@
-// src/app/contact/page.tsx
 import { dictionary, Language } from '../../utils/translations';
 
 export default async function ContactPage({ searchParams }: { searchParams: { lang?: string } }) {
@@ -7,14 +6,25 @@ export default async function ContactPage({ searchParams }: { searchParams: { la
   const t = dictionary[lang];
 
   return (
-    <main className="min-h-screen bg-gray-50 font-sans">
+    <main className="min-h-screen bg-stone-50 font-sans">
       {/* Hero Section */}
-      <section className="bg-blue-900 text-white py-20 px-4">
-        <div className="container mx-auto max-w-6xl text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+      <section className="relative bg-senegal-900 text-white py-32 px-4 overflow-hidden">
+        {/* Image: Nurturing/Support */}
+        <div 
+          className="absolute inset-0 z-0 opacity-40"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-senegal-900/80 to-senegal-800/90 z-0"></div>
+
+        <div className="container mx-auto max-w-6xl text-center relative z-10">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 drop-shadow-md">
             {t.contact.heroTitle}
           </h1>
-          <p className="text-xl opacity-90 max-w-2xl mx-auto">
+          <p className="text-xl opacity-90 max-w-2xl mx-auto font-light">
             {t.contact.heroSubtitle}
           </p>
         </div>
@@ -30,21 +40,21 @@ export default async function ContactPage({ searchParams }: { searchParams: { la
               <form>
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">{t.contact.form.name}</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:bg-white focus:outline-none transition-colors" placeholder="" />
+                  <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-senegal-500 focus:bg-white focus:outline-none transition-colors" placeholder="" />
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">{t.contact.form.email}</label>
-                  <input type="email" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:bg-white focus:outline-none transition-colors" placeholder="" />
+                  <input type="email" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-senegal-500 focus:bg-white focus:outline-none transition-colors" placeholder="" />
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">{t.contact.form.subject}</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:bg-white focus:outline-none transition-colors" placeholder="" />
+                  <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-senegal-500 focus:bg-white focus:outline-none transition-colors" placeholder="" />
                 </div>
                 <div className="mb-6">
                   <label className="block text-gray-700 text-sm font-bold mb-2">{t.contact.form.message}</label>
-                  <textarea className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:bg-white focus:outline-none transition-colors h-32"></textarea>
+                  <textarea className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-senegal-500 focus:bg-white focus:outline-none transition-colors h-32"></textarea>
                 </div>
-                <button type="button" className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                <button type="button" className="w-full bg-senegal-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-senegal-700 transition-colors shadow-lg">
                   {t.contact.form.submit}
                 </button>
               </form>
@@ -58,7 +68,7 @@ export default async function ContactPage({ searchParams }: { searchParams: { la
                 <h3 className="text-xl font-bold text-gray-900 mb-4">{t.contact.infoTitle}</h3>
                 <div className="space-y-4 text-gray-600">
                   <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 text-blue-600 mt-1">
+                    <div className="w-6 h-6 text-senegal-600 mt-1">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
@@ -67,7 +77,7 @@ export default async function ContactPage({ searchParams }: { searchParams: { la
                     <p>{t.contact.address}</p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 text-blue-600 mt-1">
+                    <div className="w-6 h-6 text-senegal-600 mt-1">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                       </svg>
@@ -78,18 +88,18 @@ export default async function ContactPage({ searchParams }: { searchParams: { la
               </div>
 
               {/* Donation Card */}
-              <div className="bg-blue-50 p-8 rounded-xl border border-blue-100 flex-grow">
-                <h3 className="text-xl font-bold text-blue-900 mb-2">{t.contact.donateTitle}</h3>
-                <p className="text-blue-800 mb-6 text-sm">{t.contact.donateText}</p>
+              <div className="bg-senegal-50 p-8 rounded-xl border border-senegal-100 flex-grow">
+                <h3 className="text-xl font-bold text-senegal-900 mb-2">{t.contact.donateTitle}</h3>
+                <p className="text-senegal-800 mb-6 text-sm">{t.contact.donateText}</p>
                 
                 <div className="space-y-4">
-                  <div className="bg-white p-4 rounded-lg border border-blue-100">
+                  <div className="bg-white p-4 rounded-lg border border-senegal-100">
                     <h4 className="font-semibold text-gray-800 text-sm uppercase tracking-wide mb-1">{t.contact.bankDetails}</h4>
                     <p className="text-gray-500 text-sm">CBAO Senegal</p>
                     <p className="font-mono text-gray-800">SN012 01234 00000000000 00</p>
                   </div>
                   
-                  <div className="bg-white p-4 rounded-lg border border-blue-100">
+                  <div className="bg-white p-4 rounded-lg border border-senegal-100">
                     <h4 className="font-semibold text-gray-800 text-sm uppercase tracking-wide mb-1">{t.contact.mobileMoney}</h4>
                     <div className="flex gap-4">
                       <div>

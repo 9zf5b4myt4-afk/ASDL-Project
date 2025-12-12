@@ -1,15 +1,11 @@
 import axios from 'axios';
-import Link from 'next/link';
 import { dictionary, Language } from '../../utils/translations';
 
-// Interface for the Project Action (matching your Strapi collection)
 interface ProjectAction {
   id: number;
   documentId: string;
   Action_Name: string;
-  Description: any[]; // Rich Text
-  // If you added an image field in Strapi for projects, add it here later
-  // image: any; 
+  Description: any[];
 }
 
 interface StrapiResponse {
@@ -17,20 +13,17 @@ interface StrapiResponse {
   meta: any;
 }
 
-// Helper to render a short preview of the description (plain text only)
 const getPlainText = (blocks: any[]) => {
   if (!blocks || !Array.isArray(blocks)) return "";
   const firstBlock = blocks.find(b => b.type === 'paragraph');
   if (!firstBlock || !firstBlock.children) return "";
   const text = firstBlock.children.map((child: any) => child.text).join("");
-  // Limit to 150 characters for the card preview
   return text.length > 150 ? text.substring(0, 150) + "..." : text;
 };
 
 async function getProjects(locale: string) {
   try {
     const apiUrl = 'https://asdl-backend-production.up.railway.app';
-    // Fetch all projects, localized
     const response = await axios.get<StrapiResponse>(`${apiUrl}/api/project-actions?locale=${locale}&populate=*`);
     return response.data;
   } catch (error) {
@@ -48,14 +41,25 @@ export default async function ProjectsPage({ searchParams }: { searchParams: { l
   const projects = strapiData?.data || [];
 
   return (
-    <main className="min-h-screen bg-gray-50 font-sans">
-      {/* Header Section */}
-      <section className="bg-blue-900 text-white py-16 px-4">
-        <div className="container mx-auto max-w-6xl text-center">
-          <h1 className="text-4xl font-bold mb-4">
+    <main className="min-h-screen bg-stone-50 font-sans">
+      {/* Header Section with Image */}
+      <section className="relative bg-senegal-900 text-white py-32 px-4 overflow-hidden">
+        {/* Image: Agriculture/Growth */}
+        <div 
+          className="absolute inset-0 z-0 opacity-40"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1628269707923-a28a3979bb95?auto=format&fit=crop&q=80')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-senegal-900/70 to-senegal-800/90 z-0"></div>
+
+        <div className="container mx-auto max-w-6xl text-center relative z-10">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-md">
             {lang === 'en' ? 'Our Projects & Actions' : 'Nos Projets & Actions'}
           </h1>
-          <p className="text-xl opacity-90 max-w-2xl mx-auto">
+          <p className="text-xl opacity-90 max-w-2xl mx-auto font-light">
             {lang === 'en' 
               ? 'Concrete initiatives making a real impact on the ground.' 
               : 'Des initiatives concrètes ayant un impact réel sur le terrain.'}
@@ -69,15 +73,15 @@ export default async function ProjectsPage({ searchParams }: { searchParams: { l
           {projects.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {projects.map((project) => (
-                <div key={project.id} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
+                <div key={project.id} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                   <div className="p-8">
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                      <span className="bg-senegal-100 text-senegal-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                         {lang === 'en' ? 'Action' : 'Action'}
                       </span>
                     </div>
                     
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-senegal-700">
                       {project.Action_Name}
                     </h3>
                     
@@ -85,10 +89,7 @@ export default async function ProjectsPage({ searchParams }: { searchParams: { l
                       {getPlainText(project.Description)}
                     </p>
                     
-                    {/* Since we don't have a detail page for single projects yet, 
-                        we can link back to the Strategic Axis it belongs to, 
-                        OR just leave it as a display card for now. */}
-                    <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+                    <button className="text-senegal-600 font-bold hover:text-senegal-800 transition-colors uppercase text-sm tracking-wide">
                       {lang === 'en' ? 'Read full details &rarr;' : 'Lire les détails &rarr;'}
                     </button>
                   </div>
