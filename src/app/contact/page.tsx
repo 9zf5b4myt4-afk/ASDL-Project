@@ -1,4 +1,5 @@
 import { dictionary, Language } from '../../utils/translations';
+import ContactForm from '../../components/ContactForm'; // Import the new component
 
 export default async function ContactPage({ searchParams }: { searchParams: { lang?: string } }) {
   const sp = await searchParams;
@@ -34,34 +35,15 @@ export default async function ContactPage({ searchParams }: { searchParams: { la
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             
-            {/* LEFT: Contact Form */}
-            <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
+            {/* LEFT: Contact Form Component */}
+            <div id="form" className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">{t.contact.formTitle}</h2>
-              <form>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">{t.contact.form.name}</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-senegal-500 focus:bg-white focus:outline-none transition-colors" placeholder="" />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">{t.contact.form.email}</label>
-                  <input type="email" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-senegal-500 focus:bg-white focus:outline-none transition-colors" placeholder="" />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">{t.contact.form.subject}</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-senegal-500 focus:bg-white focus:outline-none transition-colors" placeholder="" />
-                </div>
-                <div className="mb-6">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">{t.contact.form.message}</label>
-                  <textarea className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-senegal-500 focus:bg-white focus:outline-none transition-colors h-32"></textarea>
-                </div>
-                <button type="button" className="w-full bg-senegal-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-senegal-700 transition-colors shadow-lg">
-                  {t.contact.form.submit}
-                </button>
-              </form>
+              {/* Pass the translated labels to the client component */}
+              <ContactForm labels={t.contact.form} />
             </div>
 
             {/* RIGHT: Info & Donation */}
-            <div className="flex flex-col gap-8">
+            <div id="donate" className="flex flex-col gap-8">
               
               {/* Contact Info Card */}
               <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
