@@ -9,6 +9,10 @@ interface BlogPost {
   Title: string;
   Content: any[]; // Rich Text
   publishedAt: string;
+  Featured_Image?: {
+    url: string;
+    alternativeText?: string;
+  };
 }
 
 interface StrapiResponse {
@@ -21,7 +25,6 @@ const STRAPI_URL = 'https://asdl-backend-production.up.railway.app';
 // 1. New Helper: Render individual child nodes (Text, Bold, Links)
 const renderChildren = (children: any[]) => {
   return children.map((child: any, index: number) => {
-    // Handle Text with Bold/Italic/Underline
     if (child.type === 'text') {
       let text = <>{child.text}</>;
       if (child.bold) text = <strong>{text}</strong>;
@@ -31,7 +34,6 @@ const renderChildren = (children: any[]) => {
       return <span key={index}>{text}</span>;
     }
     
-    // Handle Links
     if (child.type === 'link') {
       return (
         <a 
@@ -55,12 +57,9 @@ const renderBlockText = (blocks: any[]) => {
   
   return blocks.map((block, index) => {
     
-    // --- SPECIAL FEATURE: AUTO-DETECT IMAGE LINKS ---
-    // Improved logic: Checks if the block text looks like an image URL
+    // Auto-detect image links
     if (block.type === 'paragraph') {
       const allText = block.children.map((c: any) => c.text || c.url).join('').trim();
-      
-      // If the paragraph is basically just a URL ending in an image extension
       if (allText.startsWith('http') && (allText.match(/\.(jpeg|jpg|gif|png|webp)$/) != null)) {
          return (
             <div key={index} className="my-10">
@@ -73,9 +72,7 @@ const renderBlockText = (blocks: any[]) => {
          );
       }
     }
-    // ------------------------------------------------
 
-    // 1. STANDARD PARAGRAPHS
     if (block.type === 'paragraph') {
       return (
         <div key={index} className="mb-6 text-gray-700 leading-relaxed text-lg">
@@ -84,7 +81,6 @@ const renderBlockText = (blocks: any[]) => {
       );
     }
     
-    // 2. HEADINGS
     if (block.type === 'heading') {
       const HeadingTag = `h${block.level}` as any;
       const sizeClass = block.level === 1 ? 'text-3xl' : block.level === 2 ? 'text-2xl' : 'text-xl';
@@ -95,7 +91,6 @@ const renderBlockText = (blocks: any[]) => {
       );
     }
 
-    // 3. LISTS
     if (block.type === 'list') {
       const ListTag = block.format === 'ordered' ? 'ol' : 'ul';
       return (
@@ -109,7 +104,6 @@ const renderBlockText = (blocks: any[]) => {
       );
     }
 
-    // 4. QUOTES
     if (block.type === 'quote') {
        return (
          <blockquote key={index} className="border-l-4 border-senegal-500 pl-6 italic my-8 text-gray-600 bg-gray-50 py-6 pr-6 rounded-r-lg">
@@ -118,7 +112,6 @@ const renderBlockText = (blocks: any[]) => {
        )
     }
 
-    // 5. NATIVE IMAGE BLOCKS
     if (block.type === 'image') {
       const image = block.image;
       const imageUrl = image.url.startsWith('http') ? image.url : `${STRAPI_URL}${image.url}`;
@@ -186,7 +179,7 @@ export default async function BlogPostPage({
 
       <div className="container mx-auto max-w-3xl px-4 py-12">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 md:p-12">
-          {/* Renders everything nicely */}
+          {/* Renders content cleanly without hero image */}
           <div className="prose prose-lg max-w-none prose-green prose-img:rounded-xl">
             {renderBlockText(post.Content)}
           </div>
