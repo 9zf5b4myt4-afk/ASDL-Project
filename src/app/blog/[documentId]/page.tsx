@@ -7,13 +7,8 @@ interface BlogPost {
   id: number;
   documentId: string;
   Title: string;
-  Content: any[];
+  Content: any[]; // Rich Text
   publishedAt: string;
-  // NEW: Featured Image
-  Featured_Image?: {
-    url: string;
-    alternativeText?: string;
-  };
 }
 
 interface StrapiResponse {
@@ -23,9 +18,10 @@ interface StrapiResponse {
 
 const STRAPI_URL = 'https://asdl-backend-production.up.railway.app';
 
-// 1. New Helper: Render individual child nodes
+// 1. New Helper: Render individual child nodes (Text, Bold, Links)
 const renderChildren = (children: any[]) => {
   return children.map((child: any, index: number) => {
+    // Handle Text with Bold/Italic/Underline
     if (child.type === 'text') {
       let text = <>{child.text}</>;
       if (child.bold) text = <strong>{text}</strong>;
@@ -34,6 +30,8 @@ const renderChildren = (children: any[]) => {
       if (child.strikethrough) text = <s>{text}</s>;
       return <span key={index}>{text}</span>;
     }
+    
+    // Handle Links
     if (child.type === 'link') {
       return (
         <a 
@@ -57,9 +55,12 @@ const renderBlockText = (blocks: any[]) => {
   
   return blocks.map((block, index) => {
     
-    // Auto-detect image links
+    // --- SPECIAL FEATURE: AUTO-DETECT IMAGE LINKS ---
+    // Improved logic: Checks if the block text looks like an image URL
     if (block.type === 'paragraph') {
       const allText = block.children.map((c: any) => c.text || c.url).join('').trim();
+      
+      // If the paragraph is basically just a URL ending in an image extension
       if (allText.startsWith('http') && (allText.match(/\.(jpeg|jpg|gif|png|webp)$/) != null)) {
          return (
             <div key={index} className="my-10">
@@ -72,7 +73,9 @@ const renderBlockText = (blocks: any[]) => {
          );
       }
     }
+    // ------------------------------------------------
 
+    // 1. STANDARD PARAGRAPHS
     if (block.type === 'paragraph') {
       return (
         <div key={index} className="mb-6 text-gray-700 leading-relaxed text-lg">
@@ -81,6 +84,7 @@ const renderBlockText = (blocks: any[]) => {
       );
     }
     
+    // 2. HEADINGS
     if (block.type === 'heading') {
       const HeadingTag = `h${block.level}` as any;
       const sizeClass = block.level === 1 ? 'text-3xl' : block.level === 2 ? 'text-2xl' : 'text-xl';
@@ -91,6 +95,7 @@ const renderBlockText = (blocks: any[]) => {
       );
     }
 
+    // 3. LISTS
     if (block.type === 'list') {
       const ListTag = block.format === 'ordered' ? 'ol' : 'ul';
       return (
@@ -104,6 +109,7 @@ const renderBlockText = (blocks: any[]) => {
       );
     }
 
+    // 4. QUOTES
     if (block.type === 'quote') {
        return (
          <blockquote key={index} className="border-l-4 border-senegal-500 pl-6 italic my-8 text-gray-600 bg-gray-50 py-6 pr-6 rounded-r-lg">
@@ -112,6 +118,7 @@ const renderBlockText = (blocks: any[]) => {
        )
     }
 
+    // 5. NATIVE IMAGE BLOCKS
     if (block.type === 'image') {
       const image = block.image;
       const imageUrl = image.url.startsWith('http') ? image.url : `${STRAPI_URL}${image.url}`;
@@ -159,14 +166,6 @@ export default async function BlogPostPage({
     return notFound();
   }
 
-  // Handle Featured Image URL
-  let featuredImageUrl = null;
-  if (post.Featured_Image?.url) {
-      featuredImageUrl = post.Featured_Image.url.startsWith('http') 
-        ? post.Featured_Image.url 
-        : `${STRAPI_URL}${post.Featured_Image.url}`;
-  }
-
   return (
     <main className="min-h-screen bg-stone-50 font-sans">
       <div className="bg-white border-b border-gray-100 py-12">
@@ -177,29 +176,17 @@ export default async function BlogPostPage({
            <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-4">
              {post.Title}
            </h1>
-           <div className="flex items-center gap-4 text-gray-500 text-sm mb-8">
+           <div className="flex items-center gap-4 text-gray-500 text-sm">
              <span>{t.blog.publishedOn} {new Date(post.publishedAt).toLocaleDateString(lang === 'en' ? 'en-US' : 'fr-FR', { dateStyle: 'long' })}</span>
              <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
              <span className="text-senegal-600 font-medium">ASDL News</span>
            </div>
-
-           {/* --- NEW: FEATURED IMAGE DISPLAY --- */}
-           {featuredImageUrl && (
-             <div className="w-full h-auto rounded-2xl overflow-hidden shadow-lg border border-gray-100 mb-8">
-               <img 
-                 src={featuredImageUrl} 
-                 alt={post.Featured_Image?.alternativeText || post.Title} 
-                 className="w-full h-full object-cover"
-               />
-             </div>
-           )}
-           {/* ----------------------------------- */}
-
         </div>
       </div>
 
       <div className="container mx-auto max-w-3xl px-4 py-12">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 md:p-12">
+          {/* Renders everything nicely */}
           <div className="prose prose-lg max-w-none prose-green prose-img:rounded-xl">
             {renderBlockText(post.Content)}
           </div>

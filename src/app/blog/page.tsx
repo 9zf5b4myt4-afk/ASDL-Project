@@ -8,7 +8,7 @@ interface BlogPost {
   Title: string;
   Content: any[]; 
   publishedAt: string;
-  // NEW: Add the Featured Image field
+  // Included Featured_Image for the card display
   Featured_Image?: {
     url: string;
     alternativeText?: string;
@@ -32,7 +32,7 @@ const getPreviewText = (blocks: any[]) => {
 
 async function getPosts(locale: string) {
   try {
-    // Populate * is critical to get the image
+    // populate=* is required to fetch the images
     const response = await axios.get<StrapiResponse>(`${STRAPI_URL}/api/blog-posts?locale=${locale}&sort=publishedAt:desc&populate=*`);
     return response.data;
   } catch (error) {
@@ -79,7 +79,7 @@ export default async function BlogPage({ searchParams }: { searchParams: { lang?
           {posts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post) => {
-                // Handle Image URL
+                // Handle Image URL logic
                 let imageUrl = null;
                 if (post.Featured_Image?.url) {
                    imageUrl = post.Featured_Image.url.startsWith('http') 
