@@ -32,7 +32,6 @@ const NavDropdown = ({ title, path, description, lang }: { title: string, path: 
   </div>
 );
 
-// Helper for the "Get Involved" Split Dropdown
 const DonateDropdown = ({ label, donateLabel, donateDesc, contactLabel, contactDesc, lang }: any) => (
   <div className="relative group h-full flex items-center">
     <button className="flex items-center gap-1 px-5 py-2.5 bg-senegal-700 text-white rounded-lg font-medium hover:bg-senegal-800 transition-colors shadow-sm">
@@ -65,7 +64,6 @@ const DonateDropdown = ({ label, donateLabel, donateDesc, contactLabel, contactD
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  // Mobile accordion states
   const [activeMobileMenu, setActiveMobileMenu] = useState<string | null>(null);
 
   const searchParams = useSearchParams();
@@ -89,7 +87,6 @@ export default function Navbar() {
     <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
         
-        {/* Logo */}
         <Link href={getLink('/')} onClick={closeMenu} className="flex items-center gap-2">
           <AsdlLogo className="h-10 w-auto md:h-12" />
         </Link>
@@ -100,7 +97,6 @@ export default function Navbar() {
             {t?.nav?.home}
           </Link>
           
-          {/* About Dropdown */}
           <NavDropdown 
             title={t.nav.about} 
             path={getLink('/about')} 
@@ -108,11 +104,18 @@ export default function Navbar() {
             lang={lang}
           />
 
-          {/* Projects Dropdown */}
           <NavDropdown 
             title={t.nav.projects} 
             path={getLink('/projects')} 
             description={t.nav.projectsDesc} 
+            lang={lang}
+          />
+
+          {/* NEW: Blog Dropdown */}
+          <NavDropdown 
+            title={t.nav.blog} 
+            path={getLink('/blog')} 
+            description={t.nav.blogDesc} 
             lang={lang}
           />
           
@@ -121,7 +124,6 @@ export default function Navbar() {
             <Link href={getSwitchLink('en')} className={`px-3 py-1 text-sm font-medium transition-colors ${lang === 'en' ? 'bg-senegal-100 text-senegal-800' : 'text-gray-500 hover:bg-gray-50'}`}>EN</Link>
           </div>
 
-          {/* Donate / Contact Split Dropdown */}
           <DonateDropdown 
             label={t.nav.donateContact} 
             donateLabel={t.nav.donate} 
@@ -194,6 +196,27 @@ export default function Navbar() {
                   <p className="mb-3">{t.nav.projectsDesc}</p>
                   <Link href={getLink('/projects')} onClick={closeMenu} className="text-senegal-700 font-bold uppercase text-xs tracking-wide">
                     {lang === 'en' ? 'View All Projects' : 'Voir tous les projets'} &rarr;
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* NEW: Blog Accordion */}
+            <div className="border-b border-gray-50">
+              <button 
+                onClick={() => toggleMobileSubmenu('blog')}
+                className="w-full flex justify-between items-center px-6 py-4 font-bold text-gray-800"
+              >
+                {t.nav.blog}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-4 h-4 transition-transform ${activeMobileMenu === 'blog' ? 'rotate-180' : ''}`}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+              {activeMobileMenu === 'blog' && (
+                <div className="bg-stone-50 px-6 py-4 text-sm text-gray-600">
+                  <p className="mb-3">{t.nav.blogDesc}</p>
+                  <Link href={getLink('/blog')} onClick={closeMenu} className="text-senegal-700 font-bold uppercase text-xs tracking-wide">
+                    {lang === 'en' ? 'Read Blog' : 'Lire le Blog'} &rarr;
                   </Link>
                 </div>
               )}

@@ -19,6 +19,8 @@ export const dictionary = {
       aboutDesc: "Discover our mission, our vision, and the team committed to Senegal's future.",
       projects: "Projects",
       projectsDesc: "Explore our concrete actions in education, health, and the environment.",
+      blog: "Blog & News", // NEW
+      blogDesc: "Latest updates, stories, and insights from our team on the ground.", // NEW
       donateContact: "Get Involved", 
       donate: "Make a Donation",
       donateDesc: "Support our initiatives financially via Wave, Orange Money, or Bank Transfer.",
@@ -66,6 +68,15 @@ export const dictionary = {
       donateText: "Your financial support directly funds our initiatives in education, health, and environment.",
       bankDetails: "Bank Transfer Details",
       mobileMoney: "Mobile Money (Wave/Orange)"
+    },
+    // NEW BLOG SECTION
+    blog: {
+      heroTitle: "News & Stories",
+      heroSubtitle: "Stay updated with our latest activities and impact in the community.",
+      readMore: "Read Article",
+      publishedOn: "Published on",
+      noPosts: "No articles found yet.",
+      backToBlog: "Back to Blog"
     }
   },
   fr: {
@@ -88,6 +99,8 @@ export const dictionary = {
       aboutDesc: "Découvrez notre mission, notre vision et l'équipe engagée pour l'avenir du Sénégal.",
       projects: "Projets",
       projectsDesc: "Explorez nos actions concrètes dans l'éducation, la santé et l'environnement.",
+      blog: "Blog & Actualités", // NEW
+      blogDesc: "Dernières mises à jour, histoires et perspectives de notre équipe sur le terrain.", // NEW
       donateContact: "S'engager",
       donate: "Faire un don",
       donateDesc: "Soutenez nos initiatives financièrement via Wave, Orange Money ou Virement.",
@@ -135,6 +148,15 @@ export const dictionary = {
       donateText: "Votre soutien financier finance directement nos initiatives en éducation, santé et environnement.",
       bankDetails: "Détails Virement Bancaire",
       mobileMoney: "Mobile Money (Wave/Orange)"
+    },
+    // NEW BLOG SECTION
+    blog: {
+      heroTitle: "Actualités & Histoires",
+      heroSubtitle: "Restez informé de nos dernières activités et de notre impact dans la communauté.",
+      readMore: "Lire l'article",
+      publishedOn: "Publié le",
+      noPosts: "Aucun article trouvé pour le moment.",
+      backToBlog: "Retour au Blog"
     }
   }
 };

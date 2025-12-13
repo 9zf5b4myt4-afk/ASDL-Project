@@ -18,7 +18,6 @@ export default function Footer() {
           {/* Column 1: Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="mb-6">
-              {/* White Text Logo without box */}
               <AsdlLogo className="h-12 w-auto" textColor="white" />
             </div>
             <p className="text-senegal-100 leading-relaxed max-w-sm">
@@ -35,6 +34,8 @@ export default function Footer() {
               <li><Link href={`/?lang=${lang}`} className="hover:text-white transition-colors">{t.nav.home}</Link></li>
               <li><Link href={`/about?lang=${lang}`} className="hover:text-white transition-colors">{t.nav.about}</Link></li>
               <li><Link href={`/projects?lang=${lang}`} className="hover:text-white transition-colors">{t.nav.projects}</Link></li>
+              {/* Added Blog Link */}
+              <li><Link href={`/blog?lang=${lang}`} className="hover:text-white transition-colors">{t.nav.blog}</Link></li>
               <li><Link href={`/contact?lang=${lang}`} className="hover:text-white transition-colors">{t.nav.donate}</Link></li>
             </ul>
           </div>
@@ -51,7 +52,6 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-senegal-800 pt-8 text-center text-senegal-300 text-sm">
-          {/* Dynamic Copyright */}
           <p>{t.copyright}</p>
         </div>
       </div>

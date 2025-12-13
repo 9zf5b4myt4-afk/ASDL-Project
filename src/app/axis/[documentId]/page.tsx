@@ -3,12 +3,12 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { dictionary, Language } from '../../../utils/translations';
 
-// 1. Updated Interface: Description is now 'any[]' because it is Rich Text
+// Interface definitions
 interface ProjectAction {
   id: number;
   documentId: string;
   Action_Name: string;
-  Description: any[]; // <--- CHANGED FROM string TO any[]
+  Description: any[]; 
 }
 
 interface StrategicAxis {
@@ -54,8 +54,8 @@ const renderBlockText = (blocks: any[]) => {
 
 async function getAxis(documentId: string, locale: string) {
   try {
+    // Hardcoded URL for stability on Vercel
     const apiUrl = 'https://asdl-backend-production.up.railway.app';
-    // Fetch data + Populate related projects
     const response = await axios.get<StrapiResponse>(`${apiUrl}/api/strategic-axes/${documentId}?locale=${locale}&populate=*`);
     return response.data.data;
   } catch (error) {
@@ -87,36 +87,51 @@ export default async function AxisDetail({
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 font-sans">
-      <div className="bg-blue-900 text-white py-12 px-4">
-        <div className="container mx-auto max-w-4xl">
-          <Link href={`/?lang=${lang}`} className="text-blue-200 hover:text-white text-sm mb-4 inline-block transition-colors">
+    <main className="min-h-screen bg-stone-50 font-sans">
+      {/* HEADER SECTION - GREEN THEME */}
+      <div className="relative bg-senegal-900 text-white py-20 px-4 overflow-hidden">
+        {/* Background Pattern/Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-senegal-900 to-senegal-800 opacity-90 z-0"></div>
+        <div 
+            className="absolute inset-0 z-0 opacity-20"
+            style={{
+                backgroundImage: "url('https://www.transparenttextures.com/patterns/cubes.png')",
+                backgroundSize: 'auto',
+            }}
+        ></div>
+
+        <div className="container mx-auto max-w-4xl relative z-10">
+          <Link href={`/?lang=${lang}`} className="text-senegal-200 hover:text-white text-sm mb-6 inline-flex items-center gap-2 transition-colors font-medium uppercase tracking-wide">
             &larr; {t.backHome}
           </Link>
-          <h1 className="text-3xl md:text-5xl font-bold">{axis.Title}</h1>
+          <h1 className="text-3xl md:text-5xl font-bold leading-tight drop-shadow-md">{axis.Title}</h1>
           
-          <div className="mt-4 text-blue-100 text-lg max-w-2xl">
+          <div className="mt-6 text-senegal-50 text-lg max-w-3xl leading-relaxed border-l-4 border-yellow-500 pl-6">
              {renderBlockText(axis.ShortDescription)}
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto max-w-4xl px-4 py-12">
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 md:p-12">
+      <div className="container mx-auto max-w-4xl px-4 py-12 -mt-10 relative z-20">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12">
           
+          {/* Status Badge */}
           {axis.projectstatus && (
-            <div className="mb-6">
-              <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide
-                ${axis.projectstatus === 'active' ? 'bg-green-100 text-green-800' : 
-                  axis.projectstatus === 'completed' ? 'bg-blue-100 text-blue-800' : 
-                  'bg-gray-100 text-gray-800'}`}>
-                {t.statusLabel} : {getStatusLabel(axis.projectstatus)}
+            <div className="mb-8 flex items-center justify-between">
+              <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest shadow-sm
+                ${axis.projectstatus === 'active' ? 'bg-green-100 text-green-800 border border-green-200' : 
+                  axis.projectstatus === 'completed' ? 'bg-blue-100 text-blue-800 border border-blue-200' : 
+                  'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
+                <span className={`w-2 h-2 rounded-full mr-2 ${axis.projectstatus === 'active' ? 'bg-green-500' : axis.projectstatus === 'completed' ? 'bg-blue-500' : 'bg-yellow-500'}`}></span>
+                {t.statusLabel}: {getStatusLabel(axis.projectstatus)}
               </span>
             </div>
           )}
 
-          <div className="prose prose-lg max-w-none text-gray-700">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{t.detailedObjective}</h2>
+          <div className="prose prose-lg max-w-none text-gray-600">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-100">
+                {t.detailedObjective}
+            </h2>
             {axis.DetailedObjective ? renderBlockText(axis.DetailedObjective) : (
               <p className="text-gray-400 italic">No detailed objective provided.</p>
             )}
@@ -124,16 +139,18 @@ export default async function AxisDetail({
 
           {/* Related Projects Section */}
           {axis.project_actions && axis.project_actions.length > 0 && (
-            <div className="mt-12 pt-8 border-t border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="mt-16 pt-10 border-t border-gray-100">
+              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-senegal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
                 {lang === 'en' ? 'Related Projects' : 'Projets Associés'}
               </h3>
-              <div className="grid gap-4">
+              <div className="grid gap-6">
                 {axis.project_actions.map((project) => (
-                  <div key={project.id} className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                    <h4 className="font-bold text-blue-900 text-lg mb-2">{project.Action_Name}</h4>
-                    <div className="text-sm text-gray-600">
-                      {/* 2. FIX: Use renderBlockText instead of direct display */}
+                  <div key={project.id} className="bg-senegal-50 p-6 rounded-xl border border-senegal-100 hover:shadow-md transition-shadow">
+                    <h4 className="font-bold text-senegal-900 text-lg mb-2">{project.Action_Name}</h4>
+                    <div className="text-sm text-gray-700 leading-relaxed">
                       {renderBlockText(project.Description)}
                     </div>
                   </div>
@@ -142,14 +159,18 @@ export default async function AxisDetail({
             </div>
           )}
 
-          <div className="mt-12 pt-8 border-t border-gray-100">
-             <h3 className="text-lg font-semibold text-gray-900 mb-2">{t.supportCauseTitle}</h3>
-             <p className="text-gray-600 mb-6">
-               {t.supportCauseText} {axis.Title}.
+          {/* CTA Section */}
+          <div className="mt-16 bg-stone-50 p-8 rounded-2xl border border-stone-200 text-center">
+             <h3 className="text-lg font-bold text-gray-900 mb-2">{t.supportCauseTitle}</h3>
+             <p className="text-gray-600 mb-6 max-w-lg mx-auto">
+               {t.supportCauseText} <strong>{axis.Title}</strong>.
              </p>
-             <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+             <Link 
+                href={`/contact?lang=${lang}#form`}
+                className="inline-block bg-senegal-600 text-white px-8 py-3 rounded-full font-bold hover:bg-senegal-700 transition-colors shadow-lg"
+             >
                {t.contactUs}
-             </button>
+             </Link>
           </div>
         </div>
       </div>
