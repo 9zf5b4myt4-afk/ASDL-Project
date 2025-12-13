@@ -56,15 +56,16 @@ const renderBlockText = (blocks: any[]) => {
   return blocks.map((block, index) => {
     
     // --- SPECIAL FEATURE: AUTO-DETECT IMAGE LINKS ---
-    if (block.type === 'paragraph' && block.children.length === 1) {
-      const child = block.children[0];
-      const text = child.text || child.url; 
-      if (text && (text.includes('.jpg') || text.includes('.png') || text.includes('.jpeg') || text.includes('.webp'))) {
-         const imageUrl = child.url || child.text; 
+    // Improved logic: Checks if the block text looks like an image URL
+    if (block.type === 'paragraph') {
+      const allText = block.children.map((c: any) => c.text || c.url).join('').trim();
+      
+      // If the paragraph is basically just a URL ending in an image extension
+      if (allText.startsWith('http') && (allText.match(/\.(jpeg|jpg|gif|png|webp)$/) != null)) {
          return (
             <div key={index} className="my-10">
               <img 
-                src={imageUrl} 
+                src={allText} 
                 alt="Article Image" 
                 className="w-full h-auto rounded-xl shadow-md border border-gray-100 object-cover"
               />
@@ -72,6 +73,7 @@ const renderBlockText = (blocks: any[]) => {
          );
       }
     }
+    // ------------------------------------------------
 
     // 1. STANDARD PARAGRAPHS
     if (block.type === 'paragraph') {
@@ -82,9 +84,8 @@ const renderBlockText = (blocks: any[]) => {
       );
     }
     
-    // 2. HEADINGS - FIXED TYPESCRIPT ERROR HERE
+    // 2. HEADINGS
     if (block.type === 'heading') {
-      // Cast to 'any' to bypass strict JSX element type checking
       const HeadingTag = `h${block.level}` as any;
       const sizeClass = block.level === 1 ? 'text-3xl' : block.level === 2 ? 'text-2xl' : 'text-xl';
       return (
