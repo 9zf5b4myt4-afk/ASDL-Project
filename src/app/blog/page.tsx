@@ -2,13 +2,15 @@ import axios from 'axios';
 import Link from 'next/link';
 import { dictionary, Language } from '../../utils/translations';
 
+// FORCE DYNAMIC: Always fetch fresh blog list
+export const dynamic = 'force-dynamic';
+
 interface BlogPost {
   id: number;
   documentId: string;
   Title: string;
   Content: any[]; 
   publishedAt: string;
-  // Included Featured_Image for the card display
   Featured_Image?: {
     url: string;
     alternativeText?: string;
@@ -32,7 +34,6 @@ const getPreviewText = (blocks: any[]) => {
 
 async function getPosts(locale: string) {
   try {
-    // populate=* is required to fetch the images
     const response = await axios.get<StrapiResponse>(`${STRAPI_URL}/api/blog-posts?locale=${locale}&sort=publishedAt:desc&populate=*`);
     return response.data;
   } catch (error) {
@@ -51,7 +52,6 @@ export default async function BlogPage({ searchParams }: { searchParams: { lang?
 
   return (
     <main className="min-h-screen bg-stone-50 font-sans">
-      {/* Hero Section */}
       <section className="relative bg-senegal-900 text-white py-32 px-4 overflow-hidden">
         <div 
           className="absolute inset-0 z-0 opacity-30"
@@ -73,13 +73,11 @@ export default async function BlogPage({ searchParams }: { searchParams: { lang?
         </div>
       </section>
 
-      {/* Posts Grid */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
           {posts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post) => {
-                // Handle Image URL logic
                 let imageUrl = null;
                 if (post.Featured_Image?.url) {
                    imageUrl = post.Featured_Image.url.startsWith('http') 
@@ -89,7 +87,6 @@ export default async function BlogPage({ searchParams }: { searchParams: { lang?
 
                 return (
                   <div key={post.id} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col">
-                    {/* Render Real Image or Fallback */}
                     <div className="h-48 bg-stone-200 flex items-center justify-center overflow-hidden">
                       {imageUrl ? (
                         <img 
