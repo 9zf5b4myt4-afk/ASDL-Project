@@ -2,14 +2,17 @@ import axios from 'axios';
 import Link from 'next/link';
 import { dictionary, Language } from '../../utils/translations';
 
-// Interface matching typical Strapi Post
 interface BlogPost {
   id: number;
   documentId: string;
   Title: string;
-  Content: any[]; // Rich Text
+  Content: any[]; 
   publishedAt: string;
-  // If images exist: FeaturedImage?: { url: string };
+  // NEW: Add the Featured Image field
+  Featured_Image?: {
+    url: string;
+    alternativeText?: string;
+  };
 }
 
 interface StrapiResponse {
@@ -17,7 +20,8 @@ interface StrapiResponse {
   meta: any;
 }
 
-// Helper for preview text
+const STRAPI_URL = 'https://asdl-backend-production.up.railway.app';
+
 const getPreviewText = (blocks: any[]) => {
   if (!blocks || !Array.isArray(blocks)) return "";
   const firstBlock = blocks.find(b => b.type === 'paragraph');
@@ -28,9 +32,8 @@ const getPreviewText = (blocks: any[]) => {
 
 async function getPosts(locale: string) {
   try {
-    const apiUrl = 'https://asdl-backend-production.up.railway.app';
-    // Pluralized endpoint 'blog-posts'
-    const response = await axios.get<StrapiResponse>(`${apiUrl}/api/blog-posts?locale=${locale}&sort=publishedAt:desc`);
+    // Populate * is critical to get the image
+    const response = await axios.get<StrapiResponse>(`${STRAPI_URL}/api/blog-posts?locale=${locale}&sort=publishedAt:desc&populate=*`);
     return response.data;
   } catch (error) {
     console.error("Error fetching Blog Posts:", error);
@@ -50,7 +53,6 @@ export default async function BlogPage({ searchParams }: { searchParams: { lang?
     <main className="min-h-screen bg-stone-50 font-sans">
       {/* Hero Section */}
       <section className="relative bg-senegal-900 text-white py-32 px-4 overflow-hidden">
-        {/* Background Image: Writing/Storytelling */}
         <div 
           className="absolute inset-0 z-0 opacity-30"
           style={{
@@ -76,31 +78,49 @@ export default async function BlogPage({ searchParams }: { searchParams: { lang?
         <div className="container mx-auto max-w-6xl">
           {posts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post) => (
-                <div key={post.id} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col">
-                  {/* Placeholder Image area if needed */}
-                  <div className="h-48 bg-stone-200 flex items-center justify-center text-stone-400">
-                    <span className="text-4xl">📰</span>
-                  </div>
-                  
-                  <div className="p-6 flex-grow">
-                    <div className="text-xs text-senegal-600 font-bold uppercase mb-2">
-                        {new Date(post.publishedAt).toLocaleDateString(lang === 'en' ? 'en-US' : 'fr-FR')}
+              {posts.map((post) => {
+                // Handle Image URL
+                let imageUrl = null;
+                if (post.Featured_Image?.url) {
+                   imageUrl = post.Featured_Image.url.startsWith('http') 
+                     ? post.Featured_Image.url 
+                     : `${STRAPI_URL}${post.Featured_Image.url}`;
+                }
+
+                return (
+                  <div key={post.id} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col">
+                    {/* Render Real Image or Fallback */}
+                    <div className="h-48 bg-stone-200 flex items-center justify-center overflow-hidden">
+                      {imageUrl ? (
+                        <img 
+                          src={imageUrl} 
+                          alt={post.Featured_Image?.alternativeText || post.Title} 
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-4xl">📰</span>
+                      )}
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-senegal-700 line-clamp-2">
-                      {post.Title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed mb-4 text-sm line-clamp-3">
-                      {getPreviewText(post.Content)}
-                    </p>
+                    
+                    <div className="p-6 flex-grow">
+                      <div className="text-xs text-senegal-600 font-bold uppercase mb-2">
+                          {new Date(post.publishedAt).toLocaleDateString(lang === 'en' ? 'en-US' : 'fr-FR')}
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-senegal-700 line-clamp-2">
+                        {post.Title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed mb-4 text-sm line-clamp-3">
+                        {getPreviewText(post.Content)}
+                      </p>
+                    </div>
+                    <div className="px-6 py-4 bg-stone-50 border-t border-gray-100 mt-auto">
+                      <Link href={`/blog/${post.documentId}?lang=${lang}`} className="text-senegal-700 font-bold hover:text-senegal-900 transition-colors uppercase text-xs tracking-wide">
+                        {t.blog.readMore} &rarr;
+                      </Link>
+                    </div>
                   </div>
-                  <div className="px-6 py-4 bg-stone-50 border-t border-gray-100 mt-auto">
-                    <Link href={`/blog/${post.documentId}?lang=${lang}`} className="text-senegal-700 font-bold hover:text-senegal-900 transition-colors uppercase text-xs tracking-wide">
-                      {t.blog.readMore} &rarr;
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-20">
