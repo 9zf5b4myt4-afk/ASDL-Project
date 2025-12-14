@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next'; // Import Metadata
 import { dictionary, Language } from '../../../utils/translations';
 
 // FORCE DYNAMIC: Prevents Vercel from caching old data
@@ -21,7 +22,46 @@ interface StrapiResponse {
 
 const STRAPI_URL = 'https://asdl-backend-production.up.railway.app';
 
-// 1. Helper: Render Children (Text, Bold, Links)
+// --- HELPER TO FETCH POST (Reused by Page and Metadata) ---
+async function getPost(documentId: string, locale: string) {
+  try {
+    const response = await axios.get<StrapiResponse>(`${STRAPI_URL}/api/blog-posts/${documentId}?locale=${locale}&populate=*`);
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching Post:", error);
+    return null;
+  }
+}
+
+// --- NEW: DYNAMIC METADATA GENERATOR ---
+export async function generateMetadata(
+  { params, searchParams }: { params: { documentId: string }, searchParams: { lang?: string } }
+): Promise<Metadata> {
+  // Await params for Next.js 15+ compatibility
+  const { documentId } = await params;
+  const sp = await searchParams;
+  const lang = (sp?.lang as Language) || 'fr';
+
+  const post = await getPost(documentId, lang);
+
+  if (!post) {
+    return {
+      title: 'Article Not Found',
+    };
+  }
+
+  return {
+    title: post.Title, // Sets the Browser Tab to the Article Title
+    description: `Read more about ${post.Title} on ASDL Senegal.`,
+    openGraph: {
+      title: post.Title,
+      description: `Read more about ${post.Title} on ASDL Senegal.`,
+      // We can even set the specific article image for WhatsApp preview here if we wanted
+    }
+  };
+}
+
+// --- RENDER HELPERS ---
 const renderChildren = (children: any[]) => {
   return children.map((child: any, index: number) => {
     if (child.type === 'text') {
@@ -32,7 +72,6 @@ const renderChildren = (children: any[]) => {
       if (child.strikethrough) text = <s>{text}</s>;
       return <span key={index}>{text}</span>;
     }
-    
     if (child.type === 'link') {
       return (
         <a 
@@ -50,17 +89,13 @@ const renderChildren = (children: any[]) => {
   });
 };
 
-// 2. Main Block Renderer
 const renderBlockText = (blocks: any[]) => {
   if (!blocks || !Array.isArray(blocks)) return "";
   
   return blocks.map((block, index) => {
-    
-    // --- SPECIAL FEATURE: AUTO-DETECT IMAGE LINKS ---
+    // Auto-detect image links
     if (block.type === 'paragraph') {
       const allText = block.children.map((c: any) => c.text || c.url).join('').trim();
-      
-      // Check for image extensions
       if (allText.startsWith('http') && (allText.match(/\.(jpeg|jpg|gif|png|webp)$/i) != null)) {
          return (
             <div key={index} className="my-10">
@@ -74,7 +109,6 @@ const renderBlockText = (blocks: any[]) => {
       }
     }
 
-    // 1. STANDARD PARAGRAPHS
     if (block.type === 'paragraph') {
       return (
         <div key={index} className="mb-6 text-gray-700 leading-relaxed text-lg">
@@ -83,7 +117,6 @@ const renderBlockText = (blocks: any[]) => {
       );
     }
     
-    // 2. HEADINGS
     if (block.type === 'heading') {
       const HeadingTag = `h${block.level}` as any;
       const sizeClass = block.level === 1 ? 'text-3xl' : block.level === 2 ? 'text-2xl' : 'text-xl';
@@ -94,7 +127,6 @@ const renderBlockText = (blocks: any[]) => {
       );
     }
 
-    // 3. LISTS
     if (block.type === 'list') {
       const ListTag = block.format === 'ordered' ? 'ol' : 'ul';
       return (
@@ -108,7 +140,6 @@ const renderBlockText = (blocks: any[]) => {
       );
     }
 
-    // 4. QUOTES
     if (block.type === 'quote') {
        return (
          <blockquote key={index} className="border-l-4 border-senegal-500 pl-6 italic my-8 text-gray-600 bg-gray-50 py-6 pr-6 rounded-r-lg">
@@ -117,7 +148,6 @@ const renderBlockText = (blocks: any[]) => {
        )
     }
 
-    // 5. NATIVE IMAGE BLOCKS
     if (block.type === 'image') {
       const image = block.image;
       const imageUrl = image.url.startsWith('http') ? image.url : `${STRAPI_URL}${image.url}`;
@@ -137,16 +167,7 @@ const renderBlockText = (blocks: any[]) => {
   });
 };
 
-async function getPost(documentId: string, locale: string) {
-  try {
-    const response = await axios.get<StrapiResponse>(`${STRAPI_URL}/api/blog-posts/${documentId}?locale=${locale}&populate=*`);
-    return response.data.data;
-  } catch (error) {
-    console.error("Error fetching Post:", error);
-    return null;
-  }
-}
-
+// --- MAIN PAGE COMPONENT ---
 export default async function BlogPostPage({ 
   params, 
   searchParams 
@@ -180,8 +201,6 @@ export default async function BlogPostPage({
              <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
              <span className="text-senegal-600 font-medium">ASDL News</span>
            </div>
-           
-           {/* NO FEATURED IMAGE HERE - Removed as requested */}
         </div>
       </div>
 
