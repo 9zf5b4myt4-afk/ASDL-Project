@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
+import { Analytics } from "@vercel/analytics/react"; // <--- 1. Fixed Import
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -14,7 +15,6 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  // Base URL is critical for SEO so Google knows the "official" link
   metadataBase: new URL("https://www.asdl-senegal.org"),
   
   title: {
@@ -25,7 +25,6 @@ export const metadata: Metadata = {
   keywords: ["Senegal", "NGO", "Association", "Development", "Education", "Women Empowerment", "Environment", "Dakar", "ASDL"],
   authors: [{ name: "ASDL Team" }],
   
-  // This tells Google bots they are allowed to read your site
   robots: {
     index: true,
     follow: true,
@@ -38,9 +37,8 @@ export const metadata: Metadata = {
     },
   },
 
-  // If you use the "HTML Tag" method for Google Search Console, paste the code here:
   verification: {
-    google: "YOUR_GOOGLE_VERIFICATION_CODE_HERE", // Optional: Delete if verifying via DNS
+    google: "YOUR_GOOGLE_VERIFICATION_CODE_HERE", 
   },
 
   openGraph: {
@@ -52,7 +50,7 @@ export const metadata: Metadata = {
     siteName: "ASDL Senegal",
     images: [
       {
-        url: "/opengraph-image.png", // Make sure you actually have an image at this path in /public
+        url: "/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "ASDL Senegal - Community Development",
@@ -64,7 +62,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ASDL Senegal",
     description: "Agir local, grandir ensemble.",
-    // images: ["/twitter-image.png"], // Optional: Add if you have a specific twitter image
   },
 };
 
@@ -74,14 +71,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   
-  // This script defines your organization for Google's Knowledge Graph
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NGO",
     "name": "Association Sénégalaise pour le Développement Local",
     "alternateName": "ASDL",
     "url": "https://www.asdl-senegal.org",
-    "logo": "https://www.asdl-senegal.org/logo.png", // Ensure you have a logo.png in /public
+    "logo": "https://www.asdl-senegal.org/logo.png",
     "description": "Association humanitaire œuvrant pour le développement local au Sénégal.",
     "address": {
       "@type": "PostalAddress",
@@ -89,7 +85,7 @@ export default function RootLayout({
       "addressCountry": "SN"
     },
     "sameAs": [
-      "https://facebook.com/asdl-senegal", // Add your actual social links here if they exist
+      "https://facebook.com/asdl-senegal",
       "https://linkedin.com/company/asdl-senegal"
     ]
   };
@@ -97,7 +93,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* Render JSON-LD Script */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -108,6 +103,9 @@ export default function RootLayout({
         </Suspense>
         
         {children}
+        
+        {/* 2. Component Added Here */}
+        <Analytics />
         
         <Suspense fallback={<div className="h-20 bg-gray-900" />}>
           <Footer />
